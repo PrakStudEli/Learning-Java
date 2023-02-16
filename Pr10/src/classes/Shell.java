@@ -103,7 +103,6 @@ public class Shell {
     // Удаляет элемент из списка с предварительной проверкой
     private boolean DeleteElementFromListSafe(String list_name, Goods el) {
         var list = GetListSafe(list_name);
-        //if (IsObjNull(el) || IsObjNull(list)) return false;
         return list.remove(el);
     }
 
