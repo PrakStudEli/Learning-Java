@@ -16,7 +16,7 @@ public class Food extends Goods {
         this.days_since_manufactured_ = days;
     }
 
-    public int GetDaysSinceManufacture() {
+    public final int GetDaysSinceManufacture() {
         return this.days_since_manufactured_;
     }
 
@@ -35,7 +35,7 @@ public class Food extends Goods {
         this.SetDaysSinceManufactured(rand_days);
     }
     
-    public double ComputeIndicator() {
+    public final double ComputeIndicator() {
         double demand = this.GetDemand();
         double cost_price = this.GetCostPrice();
         int days = this.days_since_manufactured_;
@@ -43,7 +43,7 @@ public class Food extends Goods {
         return (1/days) * Math.cos(demand * cost_price) + demand + cost_price/demand;
     }
 
-    public String toString() {
+    public final String toString() {
         String result = "{ id: " + this.GetId() + ", Costprice: " + this.GetCostPrice() + ", Demand: " + this.GetDemand() + ", Days: " + this.days_since_manufactured_ + " }"; 
         
         return result;

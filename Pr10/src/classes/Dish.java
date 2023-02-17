@@ -16,7 +16,7 @@ public class Dish extends Goods {
         this.brand_recognition_coeff_ = brand_recognition;
     }
 
-    public double GetBrandRecognitionCoeff() {
+    public final double GetBrandRecognitionCoeff() {
         return this.brand_recognition_coeff_;
     }
 
@@ -36,7 +36,7 @@ public class Dish extends Goods {
         this.SetBrandRecognitionCoeff(rand_brand);
     }
 
-    public double ComputeIndicator() {
+    public final double ComputeIndicator() {
         double cost_price = this.GetCostPrice();
         double demand = this.GetDemand();
         double brand = this.brand_recognition_coeff_;
@@ -44,7 +44,7 @@ public class Dish extends Goods {
         return brand* Math.pow((demand + cost_price), 2)/demand;
     }
 
-    public String toString() {
+    public final String toString() {
         String result = "{ id: " + this.GetId() + ", Costprice: " + this.GetCostPrice() + ", Demand: " + this.GetDemand() + ", Brand: " + this.brand_recognition_coeff_ + " }"; 
         
         return result;

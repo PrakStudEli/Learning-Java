@@ -14,6 +14,12 @@ import java.util.Random;
 import classes.command.Command;
 
 public class Shell {
+    // Считывает ввод пользователя
+    private Scanner read_line;
+
+    // Учавствует в анализе ввода пользователя
+    private Scanner input_analyzer;
+
     // Переменная, контролирующая вывод некоторых отладочных сообщений
     private static boolean DEBUG_MODE = false;
 
@@ -24,30 +30,30 @@ public class Shell {
     private HashMap<String, List<Goods>> stored_lists_with_names_ = new HashMap<String, List<Goods>>();
     
     // Штатный ГПСЧ
-    private static Random rand_ = new Random((new Date()).getTime());
+    private static final Random rand_ = new Random((new Date()).getTime());
 
     // Выводит ответные сообщения с символом новой строки в конце
-    private void MessagePrintln(String message) {
+    private final void MessagePrintln(String message) {
         if (ENABLE_MESSAGES) System.out.println(message);
     }
 
     // Выводит ответные сообщения
-    private void MessagePrint(String message) {
+    private final void MessagePrint(String message) {
         if (ENABLE_MESSAGES) System.out.print(message);
     }
 
     // Выводит отладочную информацию с символом новой строки в конце
-    private void DebugInfoPrintln(String info) {
+    private final void DebugInfoPrintln(String info) {
         if (DEBUG_MODE) System.out.println(info);
     }
 
     // Выводит отладочную информацию
-    private void DebugInfoPrint(String info) {
+    private final void DebugInfoPrint(String info) {
         if (DEBUG_MODE) System.out.print(info);
     }
 
     // Проверяет, имеется ли в хранении указанный список
-    private boolean IsListStored(String name) {
+    private final boolean IsListStored(String name) {
         return stored_lists_with_names_.containsKey(name);
     }
     
@@ -57,7 +63,7 @@ public class Shell {
     }
 
     // Возвращает список по имени, предварительно проверяя существование оного и оповещает если списка нет
-    private List<Goods> GetListSafe(String list_name) {
+    private final List<Goods> GetListSafe(String list_name) {
         if (!IsListStored(list_name)) {
             System.out.println("No such list");
             return null;
@@ -65,7 +71,7 @@ public class Shell {
         return stored_lists_with_names_.get(list_name);
     }
 
-    private boolean IsObjNull(Object el) {
+    private final boolean IsObjNull(Object el) {
         if (el == null) {
             DebugInfoPrintln("Object is null");
             return true;
@@ -73,8 +79,8 @@ public class Shell {
         return false;
     }
 
-    // Находит элемент и выдать его. Не очень эффективно
-    private Goods GetElementFromList(List<Goods> list, int id) {
+    // Находит элемент и выдает его. Не очень эффективно
+    private final Goods GetElementFromList(List<Goods> list, int id) {
         for (var element : list) {
             if (element.GetId() == id) {
                 DebugInfoPrintln("Found");
@@ -85,12 +91,12 @@ public class Shell {
     }
 
     // Выводит цену товара
-    private void PrintElementPrice(Goods el) {
+    private final static void PrintElementPrice(Goods el) {
         System.out.printf("Price of the element with id %d is %.2f\n", el.GetId(), el.ComputeIndicator());
     }
 
     // Находит элемент в списке и выдать его с предварительными проверками
-    private Goods GetElementFromListSafe(String list_name, int id) {
+    private final Goods GetElementFromListSafe(String list_name, int id) {
         var list = GetListSafe(list_name);
 
         if (IsObjNull(list)) return null;
@@ -107,12 +113,12 @@ public class Shell {
     }
 
     // Выводит суммарную стоимость всех товаров в списке
-    private void PrintListPrice(double price) {
+    private final static void PrintListPrice(double price) {
         System.out.printf("List price is %.2f\n", price);
     }
 
     // Вычисляет суммарную стоимость всех товаров в списке
-    private double ComputeListPrice(List<Goods> list) {
+    private final static double ComputeListPrice(List<Goods> list) {
         double cart = 0.0;
         
         for (var el : list) {
@@ -123,7 +129,7 @@ public class Shell {
     }
 
     // Выводит приглашение в начале строки
-    private void ShowPrompt(String prompt) {
+    private final static void ShowPrompt(String prompt) {
         System.out.print(prompt + " ");
     }
 
@@ -190,7 +196,7 @@ public class Shell {
     }
 
     // Выводит все списки и значения в них
-    private void PrintLists() {
+    private final void PrintLists() {
         for (var entry : stored_lists_with_names_.entrySet()) {
             System.out.println(entry.getKey() + ":");
             for (var element : entry.getValue()) {
@@ -200,7 +206,7 @@ public class Shell {
     }
 
     // Получает число из строки и не боится ошибок. Выводит -1 если в строке нет цифр
-    private int GetIntegerFromStringSafe(String str) {
+    private final int GetIntegerFromStringSafe(String str) {
         try {
             return Integer.valueOf(str);
         } catch (NumberFormatException e) {
@@ -210,7 +216,7 @@ public class Shell {
     }
 
     // Проводит тесты
-    private boolean RunDiagnosticsList(int length, List<Goods> list) {
+    private final boolean RunDiagnosticsList(int length, List<Goods> list) {
         if (length > 100000) {
             DebugInfoPrintln("Length is too big, it will be set to 100000 for safety reasons");
             length = 100000;
@@ -401,6 +407,8 @@ public class Shell {
                 return true;
             case EXIT:
                 usr_input.args.setSize(Command.EXIT.GetArgs());
+                read_line.close();
+                input_analyzer.close();
                 return false;
             case HELP:
                 usr_input.args.setSize(Command.HELP.GetArgs());
@@ -457,8 +465,8 @@ public class Shell {
     }
 
     // Считывает ввод пользователя и не пугается, если что-то не так
-    private String GetLineSafe(InputStream in) {
-        Scanner read_line = new Scanner(in);
+    private final String GetLineSafe(InputStream in) {
+        read_line = new Scanner(in);
         String input = new String();
         try {
             input = read_line.nextLine();
@@ -470,13 +478,13 @@ public class Shell {
     }
 
     // Обрабатывает ввод пользователя
-    public UserInput GetInput(InputStream in) {
+    public final UserInput GetInput(InputStream in) {
         String input = GetLineSafe(in);
         Vector<String> args = new Vector<String>();
 
         if (input.isEmpty()) return new UserInput(Command.NULL_CMD, args);
 
-        Scanner input_analyzer = new Scanner(input);
+        input_analyzer = new Scanner(input);
         String command_name = input_analyzer.next();
         
 
@@ -490,7 +498,7 @@ public class Shell {
         for (int i = 0; i < command.GetArgs() && input_analyzer.hasNext(); ++i) {
             args.add(input_analyzer.next());
         }
-
+        input_analyzer.close();
         return new UserInput(command, args);
     }
 

@@ -14,7 +14,7 @@ public class UserInput {
         this.args = args;
     }
 
-    public String toString() {
+    public final String toString() {
         return cmd.GetName() + args.toString();
     }
 }

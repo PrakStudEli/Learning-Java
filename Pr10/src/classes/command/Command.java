@@ -123,19 +123,19 @@ public enum Command {
         this.printable = printable;
     }
 
-    public boolean IsPrintable() {
+    public final boolean IsPrintable() {
         return this.printable;
     }
 
-    public String GetName() {
+    public final String GetName() {
         return this.name;
     }
 
-    public String GetDescription() {
+    public final String GetDescription() {
         return this.description;
     }
 
-    public int GetArgs() {
+    public final int GetArgs() {
         return this.args;
     }
 
@@ -151,7 +151,7 @@ public enum Command {
         this.args = args;
     }
 
-    public String GetCompleteDescription() {
+    public final String GetCompleteDescription() {
         return this.name + ":\n    " + this.description;
     }
 }
