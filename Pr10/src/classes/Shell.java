@@ -503,7 +503,7 @@ public class Shell {
     }
 
     // Вывести помощь
-    public final void ShowOptions() {
+    public final static void ShowOptions() {
         for (Command cmd : Command.values()) {
             if (!cmd.IsPrintable()) continue;
             System.out.println(cmd.GetCompleteDescription());
